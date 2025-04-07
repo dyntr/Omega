@@ -1,0 +1,141 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #f7f8fc, #e0eafc);
+    color: #222;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.card {
+    background: #f0f4f8;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    animation: slideUp 0.7s ease;
+}
+
+.card h2 {
+    color: #34495e;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+button {
+    background: #2d98da;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #2575aa;
+}
+
+select, input[type="date"] {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+.vysledek {
+    margin-top: 1rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    line-height: 1.6;
+}
+
+.pred-box {
+    padding: 0.7rem 1rem;
+    background: #eef6ff;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.pred-box strong {
+    font-weight: bold;
+    color: #2d98da;
+}
+
+.graf {
+    margin-top: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 0 12px rgba(0,0,0,0.05);
+}
+
+#error, .error {
+    background: #ffe6e6;
+    color: #c0392b;
+    padding: 0.7rem;
+    border-radius: 6px;
+}
+
+.success {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.warning {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    .app {
+        padding: 1rem;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .card {
+        padding: 1rem;
+    }
+}

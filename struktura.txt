@@ -1,0 +1,185 @@
+# Struktura slozek bude vypadat takto:
+
+project/
+│
+├── app.py                  # hlavni soubor Flasku (jen inicializace)
+├── requirements.txt
+├── models/
+│   ├── model_nafta_optimized.pkl
+│   └── model_natural_optimized.pkl
+├── data/
+│   └── obce-psc.csv
+├── static/
+│   ├── style.css
+│   └── script.js
+├── templates/
+│   └── index.html
+└── app_modules/
+    ├── __init__.py
+    ├── routes.py
+    ├── utils.py
+    └── predictors.py
+
+# Obsah jednotlivych souboru:
+
+# ----------------------------- app.py -----------------------------
+from flask import Flask
+from app_modules.routes import configure_routes
+
+app = Flask(__name__)
+configure_routes(app)
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5500)
+
+# --------------------------- app_modules/__init__.py --------------------------
+# (prazdny soubor jen pro oznaceni balicku)
+
+# -------------------------- app_modules/utils.py -----------------------------
+import requests, re
+import pandas as pd
+import holidays
+
+cz_holidays = holidays.Czechia()
+
+# Nacteni mapovani PSC -> okres
+psc_na_okres = {}
+df_psc = pd.read_csv("data/obce-psc.csv")
+for _, row in df_psc.iterrows():
+    okres = row["Okres"]
+    for psc in str(row["PSČ"]).split(","):
+        psc_na_okres[psc.strip()] = okres
+
+
+def ziskej_psc_z_pozice(lat, lon):
+    try:
+        url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"
+        headers = {"User-Agent": "PalivaApp/1.0"}
+        r = requests.get(url, headers=headers)
+        r.raise_for_status()
+        data = r.json()
+        if "address" in data and "postcode" in data["address"]:
+            return data["address"]["postcode"].replace(" ", "")
+        return None
+    except Exception as e:
+        print("[CHYBA ZÍSKÁNÍ PSČ]", e)
+        return None
+
+
+def ziskej_cenu_ropy():
+    try:
+        res = requests.get("https://data.kurzy.cz/json/komodity/id%5Bropa-brent%5Dden%5B30%5Dmena%5Bczk%5Dcb%5Bvypsat%5D.js")
+        match = re.findall(r'"hodnota":([\d.]+)', res.text)
+        return float(match[-1]) if match else None
+    except:
+        return None
+
+
+def ziskej_kurz_usd():
+    try:
+        res = requests.get("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN")
+        for rate in res.json()["rates"]:
+            if rate["currencyCode"] == "USD":
+                return float(rate["rate"])
+        return None
+    except:
+        return None
+
+
+def je_svatek(datum):
+    return int(datum in cz_holidays)
+
+# --------------------- app_modules/predictors.py ------------------------
+import joblib
+import pandas as pd
+from app_modules.utils import je_svatek
+
+model_nafta = joblib.load("models/model_nafta_optimized.pkl")
+model_natural = joblib.load("models/model_natural_optimized.pkl")
+
+def predikuj(okres, datum, ropa, usd):
+    vikend = int(datum.weekday() >= 5)
+    svatek = je_svatek(datum)
+    df = pd.DataFrame([{
+        "okres": okres,
+        "svatek": svatek,
+        "vikend": vikend,
+        "cena_ropy": ropa,
+        "usd": usd,
+        "den": datum.day,
+        "mesic": datum.month,
+        "rok": datum.year
+    }])
+    nafta = round(float(model_nafta.predict(df)[0]), 2)
+    natural = round(float(model_natural.predict(df)[0]), 2)
+    return nafta, natural
+
+# ---------------------- app_modules/routes.py ------------------------
+from flask import request, jsonify, render_template
+from app_modules.utils import *
+from app_modules.predictors import predikuj
+import datetime
+
+def configure_routes(app):
+    @app.route("/")
+    def index():
+        return render_template("index.html")
+
+    @app.route("/api/predict", methods=["POST"])
+    def predict():
+        data = request.get_json()
+        lat, lon = data.get("lat"), data.get("lon")
+        psc = ziskej_psc_z_pozice(lat, lon)
+        okres = psc_na_okres.get(psc)
+
+        today = datetime.date.today()
+        ropa = ziskej_cenu_ropy()
+        usd = ziskej_kurz_usd()
+
+        if not psc or not okres or ropa is None or usd is None:
+            return jsonify({"error": "Chybí data pro predikci"}), 400
+
+        nafta, natural = predikuj(okres, today, ropa, usd)
+
+        return jsonify({
+            "datum": today.isoformat(),
+            "psc": psc,
+            "okres": okres,
+            "ropa": ropa,
+            "usd": usd,
+            "vikend": int(today.weekday() >= 5),
+            "svatek": je_svatek(today),
+            "nafta": nafta,
+            "natural": natural
+        })
+
+    @app.route("/api/predict_future", methods=["POST"])
+    def predict_future():
+        data = request.get_json()
+        okres = data.get("okres")
+        start_str, end_str = data.get("start"), data.get("end")
+
+        try:
+            start_date = datetime.datetime.strptime(start_str, "%Y-%m-%d").date()
+            end_date = datetime.datetime.strptime(end_str, "%Y-%m-%d").date()
+        except:
+            return jsonify({"error": "Neplatné datumy"}), 400
+
+        if not okres or okres not in df_psc["Okres"].unique():
+            return jsonify({"error": "Neplatný okres"}), 400
+
+        ropa = ziskej_cenu_ropy()
+        usd = ziskej_kurz_usd()
+
+        vysledky = []
+        current = start_date
+        while current <= end_date:
+            nafta, natural = predikuj(okres, current, ropa, usd)
+            vysledky.append({
+                "datum": current.isoformat(),
+                "nafta": nafta,
+                "natural": natural
+            })
+            current += datetime.timedelta(days=1)
+
+        return jsonify({"okres": okres, "predictions": vysledky})

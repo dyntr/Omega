@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predikce cen paliv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app">
+    <h1>⛽ Predikce cen paliv</h1>
+
+    <div class="card aktualni">
+        <h2>📍 Aktuální predikce podle polohy</h2>
+        <button onclick="getPredictionFromLocation()">Získat predikci</button>
+        <div id="vysledek-aktualne" class="vysledek"></div>
+    </div>
+
+    <div class="card budoucnost">
+        <h2>🗓️ Predikce do budoucna</h2>
+        <label for="okres">Vyberte okres:</label>
+        <select id="okres">
+            <option value="">-- Vyberte okres --</option>
+        </select>
+
+        <label for="start-date">Od:</label>
+        <input type="date" id="start-date">
+        <label for="end-date">Do:</label>
+        <input type="date" id="end-date">
+
+        <button onclick="predictFuture()">Predikovat</button>
+        <div id="vysledek-budoucnost" class="vysledek"></div>
+        <canvas id="graf" class="graf"></canvas>
+        <div id="analyza-dnu"></div>
+    </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
