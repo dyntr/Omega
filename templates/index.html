@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predikce cen paliv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app">
+    <h1>⛽ Predikce cen paliv</h1>
+
+    <div class="card aktualni">
+        <h2>📍 Aktuální predikce podle polohy</h2>
+        <button onclick="getPredictionFromLocation()">Získat predikci</button>
+        <div id="vysledek-aktualne" class="vysledek"></div>
+    </div>
+
+    <div class="card budoucnost">
+        <h2>🗓️ Predikce do budoucna</h2>
+        
+        <div class="dropdown">
+            <button class="dropdown-button" onclick="toggleDropdown()">Vyberte okres</button>
+            <div class="dropdown-menu" id="dropdown-menu">
+                <input type="text" id="dropdown-search" class="dropdown-search" placeholder="Hledat okres...">
+                <div id="dropdown-items">
+                    <!-- Okresy budou dynamicky generovány pomocí JavaScriptu -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Skrytý input pro uložení vybraného okresu -->
+        <input type="hidden" id="okres">
+
+        <label for="start-date">Od:</label>
+        <input type="date" id="start-date" class="custom-date">
+        <label for="end-date">Do:</label>
+        <input type="date" id="end-date" class="custom-date">
+
+        <label for="typ-paliva">Vyberte typ paliva:</label>
+        <div class="button-group" id="typ-paliva-buttons">
+            <button class="palivo-button active" data-value="oboje" onclick="setTypPaliva(this)">Oboje</button>
+            <button class="palivo-button" data-value="nafta" onclick="setTypPaliva(this)">Nafta</button>
+            <button class="palivo-button" data-value="natural" onclick="setTypPaliva(this)">Benzín</button>
+        </div>
+
+        <!-- Skrytý input pro uložení vybraného typu paliva -->
+        <input type="hidden" id="typ-paliva" value="oboje">
+
+        <button onclick="predictFuture()">Predikovat</button>
+        <div id="vysledek-budoucnost" class="vysledek"></div>
+        <canvas id="graf" class="graf"></canvas>
+        <div id="analyza-dnu"></div>
+    </div>
+
+    <!-- Odkaz na dokumentaci -->
+    <div class="card dokumentace">
+        <h2>📖 Dokumentace</h2>
+        <p>Chcete-li se dozvědět více o tom, jak aplikace funguje, navštivte naši dokumentaci.</p>
+        <a href="/documentation" class="button-back">📘 Otevřít dokumentaci</a>
+    </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
++---------------------+
+|  Uživatel           |
+|  (Frontend)         |
++---------------------+
+          |
+          v
++---------------------+
+|  Flask aplikace     |
+|  (Backend)          |
++---------------------+
+          |
+          v
++---------------------+       +---------------------+
+|  API Endpointy      |<----->|  Frontend (HTML/JS) |
+|  /api/predict       |       |  - index.html       |
+|  /api/predict_future|       |  - script.js        |
++---------------------+       +---------------------+
+          |
+          v
++---------------------+
+|  Predikční logika   |
+|  (predictors.py)    |
++---------------------+
+          |
+          v
++---------------------+       +---------------------+
+|  Modely strojového  |<----->|  Data               |
+|  učení (XGBoost)    |       |  - obce-psc.csv     |
+|  - model_nafta.pkl  |       |  - crawler data     |
+|  - model_natural.pkl|       |                     |
++---------------------+       +---------------------+
+          |
+          v
++---------------------+
+|  Externí API        |
+|  - kurzy.cz         |
+|  - cnb.cz           |
+|  - OpenStreetMap    |
++---------------------+

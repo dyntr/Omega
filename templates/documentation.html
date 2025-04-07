@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentace - Predikce cen paliv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            font-size: 2rem;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        p, ul, ol, code {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 2rem;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 1rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 1rem;
+        }
+
+        a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .button-back {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+        }
+
+        .button-back:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ffffff;
+        }
+
+        .button-back:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Dokumentace - Predikce cen paliv</h1>
+
+        <div class="section">
+            <h2>📋 Obsah</h2>
+            <ul>
+                <li><a href="#popis-projektu">Popis projektu</a></li>
+                <li><a href="#funkce-aplikace">Funkce aplikace</a></li>
+                <li><a href="#technologie">Technologie</a></li>
+                <li><a href="#zdroje-dat">Zdroje dat</a></li>
+                <li><a href="#model-strojoveho-uceni">Model strojového učení</a></li>
+                <li><a href="#souborovy-system">Souborový systém</a></li>
+                <li><a href="#crawler">Crawler</a></li>
+                <li><a href="#instalace-a-spusteni">Instalace a spuštění</a></li>
+                <li><a href="#api-dokumentace">API dokumentace</a></li>
+                <li><a href="#priklady-pouziti">Příklady použití</a></li>
+                <li><a href="#chyby-a-jejich-reseni">Chyby a jejich řešení</a></li>
+                <li><a href="#vyukove-zdroje">Výukové zdroje</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="popis-projektu">
+            <h2>📖 Popis projektu</h2>
+            <p>
+                Tento projekt je webová aplikace, která umožňuje predikovat ceny nafty a benzínu na základě aktuálních dat (cena ropy, kurz USD, svátky, víkendy) a poskytuje predikce do budoucna na základě zadaných parametrů. Aplikace využívá modely strojového učení pro predikci cen a je postavena na frameworku Flask.
+            </p>
+        </div>
+
+        <div class="section" id="funkce-aplikace">
+            <h2>✨ Funkce aplikace</h2>
+            <ul>
+                <li>Predikce aktuálních cen na základě polohy uživatele.</li>
+                <li>Predikce budoucích cen na základě zadaných parametrů (okres, datumy, typ paliva).</li>
+                <li>Vizualizace dat pomocí grafů.</li>
+                <li>Dynamické načítání dat o ceně ropy a kurzu USD z API.</li>
+                <li>Podpora českých svátků při predikci cen.</li>
+            </ul>
+        </div>
+
+        <div class="section" id="technologie">
+            <h2>🛠 Technologie</h2>
+            <ul>
+                <li><strong>Backend:</strong> Flask (Python)</li>
+                <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+                <li><strong>Databáze:</strong> CSV soubor (<code>data/obce-psc.csv</code>) pro mapování PSČ na okresy</li>
+                <li><strong>Strojové učení:</strong> Scikit-learn, XGBoost</li>
+                <li><strong>API:</strong>
+                    <ul>
+                        <li><code>nominatim.openstreetmap.org</code> pro získání PSČ na základě polohy</li>
+                        <li><code>kurzy.cz</code> pro získání ceny ropy</li>
+                        <li><code>cnb.cz</code> pro získání kurzu USD</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" id="zdroje-dat">
+            <h2>📊 Zdroje dat</h2>
+            <ul>
+                <li><strong>Cena ropy:</strong> Data získána z <a href="https://kurzy.cz" target="_blank">kurzy.cz</a>.</li>
+                <li><strong>Kurz USD:</strong> Data získána z <a href="https://kurzy.cz" target="_blank">kurzy.cz</a>.</li>
+                <li><strong>PSČ a okresy:</strong> Data poskytnuta firmou CCS (<a href="https://servis.ccs.cz" target="_blank">servis.ccs.cz</a>).</li>
+                <li><strong>Svátek a víkend:</strong> Data získána pomocí knihovny <code>holidays</code>.</li>
+                <li><strong>Inflace:</strong> Ručně nasbíraná data z <a href="https://kurzy.cz" target="_blank">kurzy.cz</a>.</li>
+            </ul>
+        </div>
+
+        <div class="section" id="model-strojoveho-uceni">
+            <h2>🤖 Model strojového učení</h2>
+            <p>
+                Modely byly vytvořeny pomocí knihovny XGBoost a optimalizovány pomocí Grid Search. Proces trénování je zdokumentován v Jupyter Notebooku, který je dostupný na <a href="https://colab.research.google.com/drive/12uxDVpb4biNPRRWMGIxDKXjBkszFj28G#scrollTo=YmBhXdQsmDL5&line=6&uniqifier=1" target="_blank">Google Colab</a>.
+            </p>
+            <h3>Parametry modelu</h3>
+            <ul>
+                <li><strong>Vstupní atributy:</strong> okres, svátek, víkend, cena ropy, kurz USD, den, měsíc, rok.</li>
+                <li><strong>Výstupy:</strong> Predikovaná cena nafty a benzínu.</li>
+                <li><strong>RMSE:</strong> Nafta: 0.33 Kč, Benzín: 0.25 Kč.</li>
+            </ul>
+        </div>
+
+        <div class="section" id="souborovy-system">
+            <h2>📂 Souborový systém</h2>
+            <pre>
+project/
+│
+├── app.py                  # Hlavní soubor Flask aplikace
+├── requirements.txt        # Seznam závislostí
+├── models/                 # Složka s modely strojového učení
+│   ├── model_nafta_optimized.pkl
+│   └── model_natural_optimized.pkl
+├── data/                   # Složka s daty
+│   └── obce-psc.csv        # Mapování PSČ na okresy
+├── static/                 # Složka se statickými soubory (CSS, JS, obrázky)
+│   ├── style.css
+│   └── script.js
+├── templates/              # Složka s HTML šablonami
+│   ├── index.html
+│   └── documentation.html
+└── notebooks/              # Složka s Jupyter Notebooky
+    └── training.ipynb      # Notebook s trénováním modelů
+            </pre>
+        </div>
+
+        <div class="section" id="crawler">
+            <h2>🕷 Crawler</h2>
+            <p>
+                Crawler je skript, který pravidelně stahuje aktuální data o ceně ropy a kurzu USD z webových stránek <a href="https://kurzy.cz" target="_blank">kurzy.cz</a> a ukládá je do CSV souboru. Skript je naplánován pomocí cron jobu a běží každý den v 6:00.
+            </p>
+            <pre>
+# Příklad cron jobu
+0 6 * * * /usr/bin/python3 /path/to/crawler.py
+            </pre>
+        </div>
+
+        <div class="section" id="instalace-a-spusteni">
+            <h2>🚀 Instalace a spuštění</h2>
+            <ol>
+                <li><strong>Klonování repozitáře:</strong>
+                    <pre>
+git clone https://github.com/dyntr/Omega.git
+cd Omega
+                    </pre>
+                </li>
+                <li><strong>Instalace závislostí:</strong>
+                    <pre>
+pip install -r requirements.txt
+                    </pre>
+                </li>
+                <li><strong>Spuštění aplikace:</strong>
+                    <pre>
+python app.py
+                    </pre>
+                    Aplikace bude dostupná na adrese: <a href="http://127.0.0.1:5500" target="_blank">http://127.0.0.1:5500</a>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section" id="api-dokumentace">
+            <h2>📡 API dokumentace</h2>
+            <h3>1. `/api/predict` (POST)</h3>
+            <p><strong>Popis:</strong> Predikce aktuálních cen na základě polohy.</p>
+            <p><strong>Parametry:</strong></p>
+            <pre>
+{
+    "lat": 50.0755,
+    "lon": 14.4378
+}
+            </pre>
+            <p><strong>Odpověď:</strong></p>
+            <pre>
+{
+    "datum": "2025-04-07",
+    "psc": "12000",
+    "okres": "Praha 2",
+    "ropa": 1521.30,
+    "usd": 22.762,
+    "vikend": 0,
+    "svatek": 0,
+    "nafta": 37.28,
+    "natural": 37.42
+}
+            </pre>
+        </div>
+
+        <div class="section" id="priklady-pouziti">
+            <h2>🧪 Příklady použití</h2>
+            <h3>1. Aktuální predikce</h3>
+            <p><strong>Požadavek:</strong></p>
+            <pre>
+{
+    "lat": 50.0755,
+    "lon": 14.4378
+}
+            </pre>
+            <p><strong>Odpověď:</strong></p>
+            <pre>
+{
+    "datum": "2025-04-07",
+    "nafta": 37.28,
+    "natural": 37.42
+}
+            </pre>
+        </div>
+
+        <div class="section" id="chyby-a-jejich-reseni">
+            <h2>🛠 Chyby a jejich řešení</h2>
+            <h3>1. Chyba: „Chybí data pro predikci“</h3>
+            <p><strong>Příčina:</strong> API nedokázalo získat cenu ropy nebo kurz USD.</p>
+            <p><strong>Řešení:</strong> Zkontrolujte připojení k internetu a dostupnost API.</p>
+        </div>
+        <div class="section" id="vyukove-zdroje">
+            <h2>🎓 Výukové zdroje</h2>
+            <p>Pro úspěšnou realizaci projektu jsem využil několik výukových videí a oficiálních dokumentací, které mi pomohly pochopit potřebné knihovny, koncepty a technologie.</p>
+
+            <h3>🎥 Výuková videa</h3>
+            <ul>
+                <li><strong>Flask Crash Course for Beginners</strong><br>
+                    <a href="https://www.youtube.com/watch?v=Z1RJmh_OqeA" target="_blank">YouTube od Traversy Media</a><br>
+                    Naučil jsem se vytvořit Flask server, nastavit routy, a propojit backend s HTML šablonami.
+                </li>
+                <li><strong>XGBoost Explained</strong><br>
+                    <a href="https://www.youtube.com/watch?v=OtD8wVaFm6E" target="_blank">YouTube od StatQuest</a><br>
+                    Díky tomuto videu jsem pochopil, jak funguje algoritmus XGBoost, jak probíhá trénování a jak optimalizovat parametry.
+                </li>
+                <li><strong>Machine Learning with scikit-learn</strong><br>
+                    <a href="https://www.youtube.com/watch?v=pqNCD_5r0IU" target="_blank">YouTube tutorial</a><br>
+                    Zde jsem se naučil jak předzpracovávat data, rozdělit je na trénovací/testovací a měřit přesnost pomocí RMSE.
+                </li>
+                <li><strong>Python Pandas Tutorial</strong><br>
+                    <a href="https://www.youtube.com/watch?v=vmEHCJofslg" target="_blank">YouTube od Corey Schafer</a><br>
+                    Tento kurz mi pomohl při manipulaci s daty – čtení CSV, filtrování, přepisování a příprava datasetu.
+                </li>
+                <li><strong>Python Requests Library Tutorial</strong><br>
+                    <a href="https://www.youtube.com/watch?v=tb8gHvYlCFs" target="_blank">YouTube od Tech With Tim</a><br>
+                    Použito pro získávání aktuálních dat z API jako je kurz USD nebo cena ropy.
+                </li>
+            </ul>
+
+            <h3>📘 Oficiální dokumentace a tutoriály</h3>
+            <ul>
+                <li><strong>XGBoost Python Introduction:</strong><br>
+                    <a href="https://xgboost.readthedocs.io/en/stable/python/python_intro.html" target="_blank">xgboost.readthedocs.io</a><br>
+                    Pomohlo mi s načtením modelu, předpovědí, a optimalizací hyperparametrů pomocí GridSearch.
+                </li>
+                <li><strong>Datacamp XGBoost Tutorial:</strong><br>
+                    <a href="https://www.datacamp.com/tutorial/xgboost-in-python" target="_blank">datacamp.com</a><br>
+                    Přehledový článek s praktickými příklady trénování XGBoost modelu na datasetu a jeho vyhodnocení.
+                </li>
+                <li><strong>scikit-learn GitHub:</strong><br>
+                    <a href="https://github.com/scikit-learn/scikit-learn" target="_blank">github.com/scikit-learn</a><br>
+                    Přístup k dokumentaci, kódu a příkladům použití modelů jako LinearRegression, RandomForest atd.
+                </li>
+                <li><strong>Pandas W3Schools Tutorial:</strong><br>
+                    <a href="https://www.w3schools.com/python/pandas/default.asp" target="_blank">w3schools.com</a><br>
+                    Pomohlo mi s rychlým přehledem metod jako <code>read_csv()</code>, <code>groupby()</code>, <code>merge()</code>, apod.
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <a href="/" class="button-back">🔙 Zpět na hlavní stránku</a>
+        </div>
+    </div>
+    
+</body>
+</html>

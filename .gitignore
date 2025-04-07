@@ -1,0 +1,8 @@
+__pycache__/
+.idea/
+*.pkl
+*.csv
+*.log
+*.tmp
+temp/
+tmp/
